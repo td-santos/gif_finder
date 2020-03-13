@@ -1,0 +1,22 @@
+PODS:
+  - Flutter (1.0.0)
+  - image_picker_saver (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - image_picker_saver (from `.symlinks/plugins/image_picker_saver/ios`)
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  image_picker_saver:
+    :path: ".symlinks/plugins/image_picker_saver/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  image_picker_saver: 4f28bd70e1efdca68ad88beab0f11d22cffe04f6
+
+PODFILE CHECKSUM: 1b66dae606f75376c5f2135a8290850eeb09ae83
+
+COCOAPODS: 1.6.1
