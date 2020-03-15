@@ -19,6 +19,15 @@ class GifModel {
     print(response.body);
   }
 
+  getGifsTrending() async {
+    print("trending" );
+    response = await http.get("https://api.giphy.com/v1/gifs/trending?api_key=N1xFHJSIJW0L4xATq7QDiTDWscvZ4vFo&limit=15&rating=G");
+    return json.decode(response.body);
+    print(response.body);
+  }
+
+  
+
  
 }
 

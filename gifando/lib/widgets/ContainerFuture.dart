@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:gifando/model/GifModel.dart';
+import 'package:gifando/widgets/CardTrendingItem.dart';
 import 'ListItemGif.dart';
 
 class ContainerFuture extends StatefulWidget {
   
   final String categoria;
   final bool grid;
-  const ContainerFuture({Key key, this.categoria, this.grid}) : super(key: key);
+  final bool trending;
+  const ContainerFuture({Key key, this.categoria, this.grid,this.trending =false}) : super(key: key);
 
 
   @override
@@ -23,11 +26,17 @@ class _ContainerFutureState extends State<ContainerFuture> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    return Container(
-      height: widget.grid == true ? height  : 100,
+    return  Container(
+      height: widget.grid == true 
+      ? height  
+      : widget.trending ==false
+        ? 160
+        : 220,
       width: width,
       child: FutureBuilder(
-          future: gifModel.getGifs(widget.categoria,_offSet,limit: widget.grid == true ? 23 :14),
+          future: widget.trending==false
+          ? gifModel.getGifs(widget.categoria,_offSet,limit: widget.grid == true ? 23 :14)
+          : gifModel.getGifsTrending(),
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
@@ -53,6 +62,7 @@ class _ContainerFutureState extends State<ContainerFuture> {
                   return createGifTable(context, snapshot);
                 }else{
                   return createGifList(context, snapshot);
+                  
                 }
             }
           }),
@@ -60,15 +70,37 @@ class _ContainerFutureState extends State<ContainerFuture> {
   }
 
   Widget createGifList(BuildContext context, AsyncSnapshot snapshot) {
-  return ListView.builder(
+  return widget.trending == true
+  ? Swiper(
+    index: 1,
+    scale: 0.85,
+    viewportFraction: 0.85,
+    itemCount: snapshot.data["data"].length,
+    itemBuilder: (context, index) {
+      return CardTrendingItem(
+            url: snapshot.data["data"][index]["images"]["480w_still"]["url"],
+            index: index,
+            snapshot: snapshot,
+          );
+    },
+  )
+  : ListView.builder(
       scrollDirection: Axis.horizontal,
       itemCount: snapshot.data["data"].length,
       itemBuilder: (context, index) {
-        return ListItemGif(
-          url: snapshot.data["data"][index]["images"]["480w_still"]["url"],
-          index: index,
-          snapshot: snapshot,
-        );
+        if(widget.trending ==false){
+          return ListItemGif(
+            url: snapshot.data["data"][index]["images"]["480w_still"]["url"],
+            index: index,
+            snapshot: snapshot,
+          );
+        }else{
+          return CardTrendingItem(
+            url: snapshot.data["data"][index]["images"]["480w_still"]["url"],
+            index: index,
+            snapshot: snapshot,
+          );
+        }
       });
 }
 
@@ -80,16 +112,18 @@ class _ContainerFutureState extends State<ContainerFuture> {
     }*/
     return data.length + 1;
   }
+   
+  
 
-Widget createGifTable(BuildContext context, AsyncSnapshot snapshot) {
-  return Column(
+  Widget createGifTable(BuildContext context, AsyncSnapshot snapshot) {
+    return Column(
     children: <Widget>[
       SizedBox(
         height: MediaQuery.of(context).size.height * 0.7,
         child: GridView.builder(
       padding: EdgeInsets.only(right: 15,top: 15),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 4, crossAxisSpacing: 15, mainAxisSpacing: 10),
+            crossAxisCount: 2, crossAxisSpacing: 15, mainAxisSpacing: 10),
       //scrollDirection: Axis.horizontal,
       itemCount: _getCount(snapshot.data["data"]),
       itemBuilder: (context, index) {
