@@ -1,8 +1,16 @@
+import 'dart:async';
+
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:gifando/Controller/ControllerDialog.dart';
+import 'package:gifando/PesquisaGif.dart';
 import 'package:gifando/model/GifModel.dart';
 import 'package:gifando/widgets/ContainerFuture.dart';
+import 'package:gifando/widgets/RowCategoria.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -11,25 +19,97 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   TextEditingController _controllerSearch = TextEditingController();
-  String _search;
-  bool delay = true;
-  bool visibleLists;
+  PermissionStatus _status;
+
   int _offSet = 0;
   GifModel gifModel = GifModel();
+  bool visibleConectivity ;
+  ControllerDialog _controllerDialog = ControllerDialog();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    delay = true;
-    visibleLists = true;
+    visibleConectivity = true;
+    
+    _checkInternetConnectivity();
+    PermissionHandler().checkPermissionStatus(PermissionGroup.photos)
+    .then(_updateStatus);
+    _askPermission();
   }
 
+  _updateStatus(PermissionStatus status){
+    if(status != _status){
+      setState(() {
+        _status = status;
+      });
+    }
+  }
+
+  _askPermission(){
+    PermissionHandler().requestPermissions(
+      [PermissionGroup.photos]
+    ).then(_onStatusReq);
+  }
+
+  _onStatusReq(Map<PermissionGroup,PermissionStatus> st){
+    final status = st[PermissionGroup.photos];
+    _updateStatus(status);
+  }
+
+  _checkInternetConnectivity()async{
+    print("check connection.........................");
+    var result = await Connectivity().checkConnectivity();
+
+    if(result == ConnectivityResult.none){
+      setState(() {
+        visibleConectivity = false;
+      });
+      _dialogConnectivity();
+      
+    }else{
+      setState(() {
+        visibleConectivity = true;
+        Timer(Duration(minutes: 20), (){
+          _checkInternetConnectivity();
+        });
+      });
+  
+    }
+  }
+
+  _dialogConnectivity(){
+    showDialog(
+      context: context,
+      builder: (context){
+        return AlertDialog(
+          title: Text("Internet Connection",style: TextStyle(color: Colors.black),),
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25)),
+          content: Text("Verifique o estado da sua internet",style: TextStyle(color: Colors.black),),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("OK"),
+              onPressed: (){
+                
+                Navigator.pop(context);
+              },
+            )
+          ],
+        );
+      }
+    );
+  }
+  
+
+  
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    
+    
 
     return Scaffold(
       //backgroundColor: Color(0xff170B3B),
@@ -38,37 +118,31 @@ class _HomePageState extends State<HomePage> {
         physics: NeverScrollableScrollPhysics(),
         child: Container(
             decoration: BoxDecoration(
-                image: DecorationImage(
-                   image: AssetImage("assets/bc2.jpg"), fit: BoxFit.cover)
-                ),
+              gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Colors.black,
+                    Colors.grey[900],
+                  ]),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Container(
                   decoration: BoxDecoration(
-                      //color: Colors.orange,
-                      gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          //colors: [Colors.greenAccent[400], Colors.greenAccent[400]]
-                          //colors: [Colors.amberAccent[700], Colors.amberAccent[700]]
-                          colors: [
-                            //Colors.greenAccent[400],
-                            //Colors.teal[700],
-                            Color(0xff170B3B),
-
-                            Colors.pink[900]
-                          ]),
+                      color: Colors.transparent,
                       borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(30),
                           bottomRight: Radius.circular(30))),
-                  child: Column(
+                  child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Padding(
-                        padding: EdgeInsets.only(top: 60, left: 15),
+                        padding: EdgeInsets.only(top: 60, left: 15, bottom: 20),
                         child: Text(
-                          "Squidgif",
+                          "SquidGif",
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -76,274 +150,122 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(
-                            top: 30, right: 15, left: 15, bottom: 17),
-                        child: TextField(
-                          controller: _controllerSearch,
-                          decoration: InputDecoration(
-                            hintText: "Pesquise aqui",
-                            filled: true,
-                            fillColor: Colors.grey[300],
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(25),
-                                borderSide:
-                                    BorderSide(color: Colors.transparent)),
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(25),
-                                borderSide:
-                                    BorderSide(color: Colors.transparent)),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(25),
-                                borderSide:
-                                    BorderSide(color: Colors.transparent)),
-                          ),
-                          style: TextStyle(color: Colors.black, fontSize: 18.0),
-                          textAlign: TextAlign.left,
-                          onSubmitted: (text) {
-                            setState(() {
-                              _search = text;
-                              if (text == null || text.isEmpty || text == "") {
-                                visibleLists = true;
-                              } else {
-                                visibleLists = false;
-                              }
-
-                              //_offSet = 0;
-                            });
-                          },
-                        ),
-                      ),
-                      Visibility(
-                        visible: !visibleLists,
+                        padding: EdgeInsets.only(right: 15, top: 60),
                         child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _controllerSearch.clear();
-
-                              visibleLists = true;
-                            });
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.only(bottom: 15, left: 10),
-                            child: Icon(
-                              Icons.arrow_back_ios,
-                              color: Colors.white,
-                            ),
+                          child: Icon(
+                            Icons.search,
+                            size: 40,
+                            color: Colors.white,
                           ),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PesquisaGif()));
+                          },
                         ),
                       )
                     ],
                   ),
                 ),
                 Visibility(
-                  visible: visibleLists,
+                  visible: visibleConectivity,
                   child: SizedBox(
-                    height: height,
-                    child: ListView(
-                        //physics: ClampingScrollPhysics(),
-                        children: <Widget>[
-                          Column(
-                            children: <Widget>[
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Container(
-                                    width: width,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          top: 0, bottom: 10, left: 30),
-                                      child: Text(
-                                        "Trending",
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                            fontSize: 30,
-                                            color: Colors.greenAccent[400]),
-                                      ),
+                  height: height,
+                  child: ListView(
+                      //physics: ClampingScrollPhysics(),
+                      children: <Widget>[
+                        Column(
+                          children: <Widget>[
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                ContainerFuture(
+                                  trending: true,
+                                ),
+                                Container(
+                                  padding: EdgeInsets.only(top: 5, bottom: 5),
+                                  width: width,
+                                  //height: 10,
+                                  child: Center(
+                                    child: Text(
+                                      "-_-_-_-_-_-_-_-",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: Colors.greenAccent[400]),
                                     ),
                                   ),
-                                  ContainerFuture(
-                                    trending: true,
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.only(top: 5, bottom: 5),
-                                    width: width,
-                                    //height: 10,
-                                    child: Center(
-                                      child: Text(
-                                        "-_-_-_-_-_-_-_-",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.greenAccent[400]),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 40,
-                                  ),
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.only(left: 25, bottom: 15),
-                                    child: Container(
-                                      padding:
-                                          EdgeInsets.only(left: 20, top: 3),
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                          color: Colors.pink[400],
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(50),
-                                              bottomLeft: Radius.circular(10))),
-                                      width: width,
-                                      child: Text(
-                                        "Pets",
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ),
-                                  ContainerFuture(
-                                    categoria: "pets",
-                                  ),
-                                  SizedBox(
-                                    height: 40,
-                                  ),
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.only(left: 25, bottom: 15),
-                                    child: Container(
-                                      padding:
-                                          EdgeInsets.only(left: 20, top: 3),
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                          color: Colors.greenAccent[400],
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(50),
-                                              bottomLeft: Radius.circular(10))),
-                                      width: width,
-                                      child: Text(
-                                        "Games",
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ),
-                                  ContainerFuture(
-                                    categoria: "gamers",
-                                  ),
-                                  SizedBox(
-                                    height: 40,
-                                  ),
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.only(left: 25, bottom: 25),
-                                    child: Container(
-                                      padding:
-                                          EdgeInsets.only(left: 20, top: 3),
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                          color: Colors.pink[400],
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(50),
-                                              bottomLeft: Radius.circular(10))),
-                                      width: width,
-                                      child: Text(
-                                        "Animes",
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ),
-                                  ContainerFuture(
-                                    categoria: "anime cute",
-                                  ),
-                                  SizedBox(
-                                    height: 40,
-                                  ),
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.only(left: 25, bottom: 15),
-                                    child: Container(
-                                      padding:
-                                          EdgeInsets.only(left: 20, top: 3),
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                          color: Colors.indigo[900],
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(50),
-                                              bottomLeft: Radius.circular(10))),
-                                      width: width,
-                                      child: Text(
-                                        "Diversão",
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ),
-                                  ContainerFuture(
-                                    categoria: "hahaha",
-                                  ),
-                                  SizedBox(
-                                    height: 40,
-                                  ),
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.only(left: 25, bottom: 15),
-                                    child: Container(
-                                      padding:
-                                          EdgeInsets.only(left: 20, top: 3),
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                          color: Colors.pink[400],
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(50),
-                                              bottomLeft: Radius.circular(10))),
-                                      width: width,
-                                      child: Text(
-                                        "Heróis",
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ),
-                                  ContainerFuture(
-                                    categoria: "marvel hq",
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 300,
-                              )
-                            ],
-                          ),
-                        ]),
-                  ),
+                                ),
+                                SizedBox(
+                                  height: 40,
+                                ),
+                                RowCategoria(
+                                  title: "Pets",
+                                  categoriaSearch: "pets",
+                                  color: Colors.pink,
+                                ),
+                                SizedBox(
+                                  height: 40,
+                                ),
+                                RowCategoria(
+                                  title: "Games",
+                                  categoriaSearch: "Gamers",
+                                  color: Colors.blue,
+                                ),
+                                SizedBox(
+                                  height: 40,
+                                ),
+                                RowCategoria(
+                                  title: "Animes",
+                                  categoriaSearch: "anime",
+                                  color: Colors.orange,
+                                ),
+                                SizedBox(
+                                  height: 40,
+                                ),
+                                RowCategoria(
+                                  title: "Funny",
+                                  categoriaSearch: "meme",
+                                  color: Colors.purple,
+                                ),
+                                SizedBox(
+                                  height: 40,
+                                ),
+                                RowCategoria(
+                                  title: "Esportes",
+                                  categoriaSearch: "sport",
+                                  color: Colors.yellow,
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 300,
+                            )
+                          ],
+                        ),
+                      ]),
+                ),
                 ),
                 Visibility(
-                    visible: !visibleLists,
-                    child: ContainerFuture(
-                      categoria: _search,
-                      grid: true,
-                    )
-
-                    /*Container(
-                  color: Colors.blue,
-                  height: 400,
-                  width: 400,
-                ),
-                */
+                  visible: !visibleConectivity,
+                  child: Container(
+                    padding: EdgeInsets.only(bottom: 100),
+                    height: height,
+                    child: Center(
+                    child: GestureDetector(
+                      child: Icon(Icons.sync,color: Colors.white,size: 150,),
+                      onTap: (){
+                        
+                        _checkInternetConnectivity();
+                      },
                     ),
+                  ),
+                  ),
+                )
               ],
             )),
       ),
+      
     );
   }
 }

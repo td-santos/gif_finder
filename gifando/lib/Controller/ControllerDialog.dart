@@ -1,15 +1,18 @@
+
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker_saver/image_picker_saver.dart';
 import 'package:http/http.dart' as http;
 
- class ControllerDialog{
-  
+
+ class ControllerDialog{   
+   
    ControllerDialog();
 
-  void downloadGIF(String url) async {
-    var filePath;
+  downloadGIF(String url) async {    
     var response = await http.get(url);
-    filePath = await ImagePickerSaver.saveFile(fileData: response.bodyBytes);
+    await ImagePickerSaver.saveFile(fileData: response.bodyBytes);    
   }
 
   dialogGIF(BuildContext context, AsyncSnapshot snapshot, int index) {
@@ -53,6 +56,9 @@ import 'package:http/http.dart' as http;
                       onTap: () {
                         downloadGIF(snapshot.data["data"][index]["images"]
                             ["fixed_height"]["url"]);
+                            Timer(Duration(seconds: 2), (){
+
+                            });
                         Navigator.pop(context);
                       },
                       child: Container(
@@ -63,7 +69,7 @@ import 'package:http/http.dart' as http;
                             borderRadius: BorderRadius.circular(17)),
                         child: Center(
                           child: Text(
-                            "Baixar",
+                            "download",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
@@ -77,4 +83,7 @@ import 'package:http/http.dart' as http;
               ));
         });
   }
+
+
+  
 }

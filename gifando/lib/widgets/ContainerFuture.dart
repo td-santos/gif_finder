@@ -32,7 +32,7 @@ class _ContainerFutureState extends State<ContainerFuture> {
       : widget.trending ==false
         ? 160
         : 220,
-      width: width,
+      width: width -6,
       child: FutureBuilder(
           future: widget.trending==false
           ? gifModel.getGifs(widget.categoria,_offSet,limit: widget.grid == true ? 23 :14)
@@ -118,64 +118,75 @@ class _ContainerFutureState extends State<ContainerFuture> {
   Widget createGifTable(BuildContext context, AsyncSnapshot snapshot) {
     return Column(
     children: <Widget>[
-      SizedBox(
-        height: MediaQuery.of(context).size.height * 0.7,
-        child: GridView.builder(
-      padding: EdgeInsets.only(right: 15,top: 15),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, crossAxisSpacing: 15, mainAxisSpacing: 10),
-      //scrollDirection: Axis.horizontal,
-      itemCount: _getCount(snapshot.data["data"]),
-      itemBuilder: (context, index) {
-        if (widget.categoria == null || index < snapshot.data["data"].length)
-        return ListItemGif(
-          url: snapshot.data["data"][index]["images"]["480w_still"]["url"],
-          index: index,
-          snapshot: snapshot,
+      Expanded(
+              child: SizedBox(
+          height: MediaQuery.of(context).size.height,// * 0.8,
+          child: GridView.builder(
+        padding: EdgeInsets.only(right: 15,top: 15),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, crossAxisSpacing: 15, mainAxisSpacing: 10),
+        //scrollDirection: Axis.horizontal,
+        itemCount: _getCount(snapshot.data["data"]),
+        itemBuilder: (context, index) {
+          if (widget.categoria == null || index < snapshot.data["data"].length)
+          return ListItemGif(
+            url: snapshot.data["data"][index]["images"]["480w_still"]["url"],
+            index: index,
+            snapshot: snapshot,
 
-        );
+          );
 
-        else
-            return Container(
-              padding: EdgeInsets.only(left: 10),
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(25)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    _offSet > 22
-                        ? GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _offSet -= 23;
-                              });
-                            },
-                            child: Icon(
-                              Icons.remove,
-                              color: Colors.pink[400],
-                              size: 30.0,
-                            ),
-                          )
-                        : Container(),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _offSet += 23;
-                        });
-                      },
-                      child: Icon(
-                        Icons.add,
-                        color: Colors.pink[400],
-                        size: 30.0,
+          else
+              return Container(
+                padding: EdgeInsets.only(left: 10),
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.limeAccent[400],
+                      borderRadius: BorderRadius.circular(25)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      _offSet > 22
+                          ? GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _offSet -= 23;
+                                });
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.only(right: 20),
+                                child: Icon(
+                                Icons.remove,
+                                color: Colors.black,
+                                size: 50.0,
+                              ),
+                              ),
+                            )                            
+                          : Container(),
+                      _offSet > 22
+                      ? Container(width: 4,height: MediaQuery.of(context).size.height,color: Colors.black,)
+                      : Container(),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _offSet += 23;
+                          });
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.only(left:_offSet > 22 ? 20: 0),
+                          child: Icon(
+                          Icons.add,
+                          color: Colors.black,
+                          size: 50.0,
+                        ),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            );
-      }),
+              );
+        }),
+        ),
       ),
       //SizedBox(height: 100,)
     ],

@@ -21,13 +21,13 @@ class ListItemGif extends StatelessWidget {
         padding: EdgeInsets.only(left: 15),
         child: Container(
           decoration: BoxDecoration(
-            color: Color(0xff170B3B),
-            borderRadius: BorderRadius.circular(15)
+            color: Colors.blueAccent.withOpacity(0.8),
+            borderRadius: BorderRadius.circular(0)
           ),
           height: 160,
-          width: 230,
+          width: 180,
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(0),
             child: Image.network(
               url,
               fit: BoxFit.cover,
