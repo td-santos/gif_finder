@@ -107,9 +107,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    
-    
+    double height = MediaQuery.of(context).size.height;   
+
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);   
 
     return Scaffold(
       //backgroundColor: Color(0xff170B3B),
@@ -122,8 +123,8 @@ class _HomePageState extends State<HomePage> {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    Colors.black,
-                    Colors.grey[900],
+                    Colors.black,Colors.grey[850]
+                    //Colors.white, Colors.white
                   ]),
             ),
             child: Column(
@@ -140,22 +141,22 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Padding(
-                        padding: EdgeInsets.only(top: 60, left: 15, bottom: 20),
+                        padding: EdgeInsets.only(top: width *0.15, left: width *0.03, bottom: width *0.05),
                         child: Text(
                           "SquidGif",
                           style: TextStyle(
-                              color: Colors.white,
+                              color: Colors.grey,
                               fontWeight: FontWeight.bold,
-                              fontSize: 40),
+                              fontSize: width * 0.1),
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(right: 15, top: 60),
+                        padding: EdgeInsets.only(right: width *0.03, top: width *0.16),
                         child: GestureDetector(
                           child: Icon(
                             Icons.search,
-                            size: 40,
-                            color: Colors.white,
+                            size: width * 0.1,
+                            color: Colors.grey,
                           ),
                           onTap: () {
                             Navigator.push(
@@ -184,7 +185,7 @@ class _HomePageState extends State<HomePage> {
                                   trending: true,
                                 ),
                                 Container(
-                                  padding: EdgeInsets.only(top: 5, bottom: 5),
+                                  padding: EdgeInsets.only(top: width * 0.03, bottom: width * 0.02),
                                   width: width,
                                   //height: 10,
                                   child: Center(
@@ -197,7 +198,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                                 SizedBox(
-                                  height: 40,
+                                  height: width * 0.1,
                                 ),
                                 RowCategoria(
                                   title: "Pets",
@@ -205,7 +206,7 @@ class _HomePageState extends State<HomePage> {
                                   color: Colors.pink,
                                 ),
                                 SizedBox(
-                                  height: 40,
+                                  height: width * 0.1,
                                 ),
                                 RowCategoria(
                                   title: "Games",
@@ -213,7 +214,7 @@ class _HomePageState extends State<HomePage> {
                                   color: Colors.blue,
                                 ),
                                 SizedBox(
-                                  height: 40,
+                                  height: width * 0.1,
                                 ),
                                 RowCategoria(
                                   title: "Animes",
@@ -221,7 +222,7 @@ class _HomePageState extends State<HomePage> {
                                   color: Colors.orange,
                                 ),
                                 SizedBox(
-                                  height: 40,
+                                  height: width * 0.1,
                                 ),
                                 RowCategoria(
                                   title: "Funny",
@@ -229,7 +230,7 @@ class _HomePageState extends State<HomePage> {
                                   color: Colors.purple,
                                 ),
                                 SizedBox(
-                                  height: 40,
+                                  height: width * 0.1,
                                 ),
                                 RowCategoria(
                                   title: "Esportes",
@@ -239,7 +240,7 @@ class _HomePageState extends State<HomePage> {
                               ],
                             ),
                             SizedBox(
-                              height: 300,
+                              height: width * 0.5,
                             )
                           ],
                         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gifando/widgets/ContainerFuture.dart';
 
 class PesquisaGif extends StatefulWidget {
@@ -16,11 +17,13 @@ class _PesquisaGifState extends State<PesquisaGif> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
     return Scaffold(
       body: SingleChildScrollView(
-        
         child: Container(
-          padding: EdgeInsets.only(bottom: 20),
+          padding: EdgeInsets.only(bottom: width * 0.1),
           width: width,
           height: height,
           decoration: BoxDecoration(
@@ -31,18 +34,16 @@ class _PesquisaGifState extends State<PesquisaGif> {
                   Colors.black,
                   Colors.grey[900],
                 ]),
-            //image: DecorationImage(
-            //   image: AssetImage("assets/bc2.jpg"), fit: BoxFit.cover)
           ),
           child: Column(
-            //crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.only(left: 15, top: 60),
+                    padding:
+                        EdgeInsets.only(left: width * 0.03, top: width * 0.15),
                     child: GestureDetector(
                       onTap: () {
                         setState(() {
@@ -52,7 +53,7 @@ class _PesquisaGifState extends State<PesquisaGif> {
                       },
                       child: Padding(
                         padding: EdgeInsets.only(
-                          bottom: 15,
+                          bottom: width * 0.03,
                         ),
                         child: Icon(
                           Icons.arrow_back_ios,
@@ -64,7 +65,10 @@ class _PesquisaGifState extends State<PesquisaGif> {
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.only(
-                          top: 60, right: 20, left: 15, bottom: 17),
+                          top: width * 0.15,
+                          right: width * 0.06,
+                          left: width * 0.03,
+                          bottom: width * 0.04),
                       child: TextField(
                         controller: _controllerSearch,
                         decoration: InputDecoration(
@@ -84,14 +88,16 @@ class _PesquisaGifState extends State<PesquisaGif> {
                               borderSide:
                                   BorderSide(color: Colors.transparent)),
                         ),
-                        style: TextStyle(color: Colors.black, fontSize: 18.0),
+                        style: TextStyle(
+                            color: Colors.black, fontSize: width * 0.04),
                         textAlign: TextAlign.left,
                         onSubmitted: (text) {
                           setState(() {
-                            //_search = text;
-                            visibleGrid = true;
-
-                            //_offSet = 0;
+                            if (text == "" || text.isEmpty) {
+                              visibleGrid = false;
+                            } else {
+                              visibleGrid = true;
+                            }
                           });
                         },
                       ),
@@ -105,6 +111,18 @@ class _PesquisaGifState extends State<PesquisaGif> {
                     child: ContainerFuture(
                       categoria: _controllerSearch.text,
                       grid: true,
+                    ),
+                  )),
+              Visibility(
+                  visible: !visibleGrid,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: width * 0.3),
+                    child: Container(
+                      child: Icon(
+                        Icons.search,
+                        size: width * 0.5,
+                        color: Colors.grey.withOpacity(0.1),
+                      ),
                     ),
                   )),
             ],

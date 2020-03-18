@@ -14,20 +14,25 @@ class ListItemGif extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     
     return GestureDetector(
       child: Padding(
-        padding: EdgeInsets.only(left: 15),
+        padding: EdgeInsets.only(left: width * 0.02),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.blueAccent.withOpacity(0.8),
-            borderRadius: BorderRadius.circular(0)
+            image: DecorationImage(
+                      image: AssetImage("assets/loading.png",),
+                      fit: BoxFit.fitHeight,
+                      ),
+            color: Colors.greenAccent.withOpacity(0.8),//Colors.blueAccent.withOpacity(0.8),
+            borderRadius: BorderRadius.circular(5)
           ),
-          height: 160,
-          width: 180,
+          height: height * 0.16,//160,
+          width: width * 0.4,//180,
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(0),
+            borderRadius: BorderRadius.circular(5),
             child: Image.network(
               url,
               fit: BoxFit.cover,

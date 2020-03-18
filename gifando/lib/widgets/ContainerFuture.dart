@@ -30,9 +30,11 @@ class _ContainerFutureState extends State<ContainerFuture> {
       height: widget.grid == true 
       ? height  
       : widget.trending ==false
-        ? 160
-        : 220,
-      width: width -6,
+        ? height * 0.18//160
+        : height * 0.22,//220,
+      width: widget.trending ==false 
+        ?width * 0.98 //- 6,
+        :width,
       child: FutureBuilder(
           future: widget.trending==false
           ? gifModel.getGifs(widget.categoria,_offSet,limit: widget.grid == true ? 23 :14)
@@ -45,7 +47,7 @@ class _ContainerFutureState extends State<ContainerFuture> {
                 return Container(
                   alignment: Alignment.center,
                     width: double.infinity,
-                    height: 100,
+                    height: 50,
                     /*decoration: BoxDecoration(
                         image: DecorationImage(
                       image: AssetImage("assets/loading2.gif"),
@@ -104,27 +106,23 @@ class _ContainerFutureState extends State<ContainerFuture> {
       });
 }
 
-  int _getCount(List data, ) {
-    /*if (cat == null || cat.isEmpty) {
-      return data.length;
-    } else {
-      return data.length + 1;
-    }*/
+  int _getCount(List data) {    
     return data.length + 1;
-  }
-   
+  }  
   
 
   Widget createGifTable(BuildContext context, AsyncSnapshot snapshot) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Column(
     children: <Widget>[
       Expanded(
               child: SizedBox(
           height: MediaQuery.of(context).size.height,// * 0.8,
           child: GridView.builder(
-        padding: EdgeInsets.only(right: 15,top: 15),
+        padding: EdgeInsets.only(right: width * 0.03,top: width * 0.03),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, crossAxisSpacing: 15, mainAxisSpacing: 10),
+              crossAxisCount: 2, crossAxisSpacing: width * 0.02, mainAxisSpacing: width * 0.03),
         //scrollDirection: Axis.horizontal,
         itemCount: _getCount(snapshot.data["data"]),
         itemBuilder: (context, index) {
@@ -138,11 +136,16 @@ class _ContainerFutureState extends State<ContainerFuture> {
 
           else
               return Container(
-                padding: EdgeInsets.only(left: 10),
+                padding: EdgeInsets.only(left: width * 0.03),
                 child: Container(
                   decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("assets/fundobotao.png"),
+                      fit: BoxFit.cover
+                    ),
                       color: Colors.limeAccent[400],
                       borderRadius: BorderRadius.circular(25)),
+                      
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -154,11 +157,11 @@ class _ContainerFutureState extends State<ContainerFuture> {
                                 });
                               },
                               child: Padding(
-                                padding: EdgeInsets.only(right: 20),
+                                padding: EdgeInsets.only(right: width * 0.03),
                                 child: Icon(
                                 Icons.remove,
                                 color: Colors.black,
-                                size: 50.0,
+                                size: width * 0.15,
                               ),
                               ),
                             )                            
@@ -173,11 +176,11 @@ class _ContainerFutureState extends State<ContainerFuture> {
                           });
                         },
                         child: Padding(
-                          padding: EdgeInsets.only(left:_offSet > 22 ? 20: 0),
+                          padding: EdgeInsets.only(left:_offSet > 22 ? width * 0.03: 0),
                           child: Icon(
                           Icons.add,
                           color: Colors.black,
-                          size: 50.0,
+                          size: _offSet < 22 ?width * 0.2:width * 0.15,
                         ),
                         ),
                       ),
