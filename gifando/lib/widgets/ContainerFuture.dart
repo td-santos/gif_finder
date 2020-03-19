@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:gifando/model/GifModel.dart';
@@ -19,13 +21,18 @@ class ContainerFuture extends StatefulWidget {
 class _ContainerFutureState extends State<ContainerFuture> {
 
   GifModel gifModel = GifModel();
-  int _offSet = 0;
+  var random = Random();
+  int _offSet ;
   
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    _offSet = random.nextInt(30); 
+
+    print("OFFSET-RANDOM : $_offSet");
+
     return  Container(
       height: widget.grid == true 
       ? height  
@@ -114,7 +121,9 @@ class _ContainerFutureState extends State<ContainerFuture> {
   Widget createGifTable(BuildContext context, AsyncSnapshot snapshot) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    return Column(
+    return Padding(
+      padding: EdgeInsets.only(bottom: 2,right: width * 0.015,left: width * 0.025),
+      child: Column(
     children: <Widget>[
       Expanded(
               child: SizedBox(
@@ -193,7 +202,8 @@ class _ContainerFutureState extends State<ContainerFuture> {
       ),
       //SizedBox(height: 100,)
     ],
-  );
+  ),
+    );
 }
 
 

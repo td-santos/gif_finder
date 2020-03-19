@@ -23,7 +23,7 @@ class _PesquisaGifState extends State<PesquisaGif> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.only(bottom: width * 0.1),
+          padding: EdgeInsets.only(bottom: width * 0.14),
           width: width,
           height: height,
           decoration: BoxDecoration(

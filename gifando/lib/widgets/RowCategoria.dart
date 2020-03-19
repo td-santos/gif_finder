@@ -18,12 +18,12 @@ class RowCategoria extends StatelessWidget {
       children: <Widget>[
         Container(
           width: width * 0.015,//6,
-          height: height * 0.24,//213,
+          height: height * 0.3,//* 0.24,//213,
           decoration: BoxDecoration(
             color: color,
             borderRadius: BorderRadius.only(
-              topRight: Radius.circular(20),
-              bottomRight: Radius.circular(20)
+              topRight: Radius.circular(0),
+              bottomRight: Radius.circular(0)
             )
             ),
         ),

@@ -1,4 +1,4 @@
-package com.dantas.thiago.gifando
+package com.dantas.thiago.squidgif
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

@@ -29,6 +29,7 @@ dependencies:
   flutter_swiper: ^1.1.6
   permission_handler: ^4.4.0+hotfix.2
   connectivity: ^0.4.8+2
+  #firebase_admob: ^0.9.3
 
   
   
@@ -36,6 +37,14 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.7.4
+
+flutter_icons:
+  android: true 
+  ios: true
+  image_path: "assets/squidgif_logo.jpg"
+  adaptive_icon_background: "#990099" #"#000000" #"#00BCD4"
+  adaptive_icon_foreground: "assets/squidgif_adaptive.png"
 
 
 # For information on the generic Dart part of this file, see the

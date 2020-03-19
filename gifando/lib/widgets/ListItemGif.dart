@@ -26,7 +26,7 @@ class ListItemGif extends StatelessWidget {
                       image: AssetImage("assets/loading.png",),
                       fit: BoxFit.fitHeight,
                       ),
-            color: Colors.greenAccent.withOpacity(0.8),//Colors.blueAccent.withOpacity(0.8),
+            //color: Colors.greenAccent.withOpacity(0.8),//Colors.blueAccent.withOpacity(0.8),
             borderRadius: BorderRadius.circular(5)
           ),
           height: height * 0.16,//160,
@@ -34,7 +34,7 @@ class ListItemGif extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(5),
             child: Image.network(
-              url,
+              url,//snapshot.data["data"][index]["images"]["fixed_height"]["url"],url,
               fit: BoxFit.cover,
             ),
           ),

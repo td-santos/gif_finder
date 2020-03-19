@@ -5,8 +5,9 @@ import 'package:gifando/HomePage.dart';
 main(List<String> args) {
 
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    //systemNavigationBarColor: Colors.lightBlue[700], // navigation bar color
-    statusBarColor: Colors.black,
+    systemNavigationBarColor: Colors.grey[850],
+    systemNavigationBarIconBrightness: Brightness.light,// navigation bar color
+    statusBarColor: Colors.black,    
     
     statusBarIconBrightness: Brightness.light // status bar color
   ));
