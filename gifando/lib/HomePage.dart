@@ -23,7 +23,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  /*static final MobileAdTargetingInfo targetInfo = new MobileAdTargetingInfo(
+ /* static final MobileAdTargetingInfo targetInfo = new MobileAdTargetingInfo(
     testDevices: <String>[],
     keywords: <String>['game', 'musica', 'finance'],
     birthday: new DateTime.now(),

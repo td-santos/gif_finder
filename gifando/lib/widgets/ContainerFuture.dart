@@ -22,14 +22,17 @@ class _ContainerFutureState extends State<ContainerFuture> {
 
   GifModel gifModel = GifModel();
   var random = Random();
-  int _offSet ;
+  int _offSet =0;
   
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    
+  if(widget.grid != true){
     _offSet = random.nextInt(30); 
+  }
 
     print("OFFSET-RANDOM : $_offSet");
 
@@ -161,6 +164,7 @@ class _ContainerFutureState extends State<ContainerFuture> {
                       _offSet > 22
                           ? GestureDetector(
                               onTap: () {
+                                print("OFFSET-menos : $_offSet");
                                 setState(() {
                                   _offSet -= 23;
                                 });
@@ -180,6 +184,7 @@ class _ContainerFutureState extends State<ContainerFuture> {
                       : Container(),
                       GestureDetector(
                         onTap: () {
+                          print("OFFSET-Mais : $_offSet");
                           setState(() {
                             _offSet += 23;
                           });
