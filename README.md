@@ -1,4 +1,4 @@
-# gif_finder
+# SquidGIF
  
 <br>
 Aplicatico buscador de Gifs , com o ituito de pesquisar e realizar download do gif escolhido.
