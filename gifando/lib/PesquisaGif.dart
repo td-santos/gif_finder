@@ -10,7 +10,7 @@ class PesquisaGif extends StatefulWidget {
 class _PesquisaGifState extends State<PesquisaGif> {
   TextEditingController _controllerSearch = TextEditingController();
   bool visibleGrid = false;
-  int _offSet = 0;
+  //int _offSet = 0;
 
   @override
   Widget build(BuildContext context) {

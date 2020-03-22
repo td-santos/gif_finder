@@ -14,23 +14,14 @@ import 'package:gifando/widgets/RowCategoria.dart';
 import 'package:permission_handler/permission_handler.dart';
 //import 'package:firebase_admob/firebase_admob.dart';
 
-const String testDevice = '';
 
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-
- /* static final MobileAdTargetingInfo targetInfo = new MobileAdTargetingInfo(
-    testDevices: <String>[],
-    keywords: <String>['game', 'musica', 'finance'],
-    birthday: new DateTime.now(),
-    childDirected: true,
-  );
-
-  BannerAd _bannerAd;*/
+class _HomePageState extends State<HomePage> { 
+  
 
   TextEditingController _controllerSearch = TextEditingController();
   PermissionStatus _status;
@@ -40,20 +31,29 @@ class _HomePageState extends State<HomePage> {
   bool visibleConectivity;
   ControllerDialog _controllerDialog = ControllerDialog();
 
-  /*BannerAd createBannerAd() {
-    return new BannerAd(
-        adUnitId: "ca-app-pub-3940256099942544/6300978111",
-        size: AdSize.banner,
-        targetingInfo: targetInfo,
-        listener: (MobileAdEvent event) {
-          print("Banner event : $event");
-        });
-  }
+  
 
-  void dispose(){
-    _bannerAd?.dispose();
-    super.dispose();
-  }*/
+  /*static final MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+    keywords: <String>['games', 'music'],
+    //contentUrl: 'https://flutter.io',
+    birthday: DateTime.now(),
+    childDirected: false,
+    designedForFamilies: false,
+    //gender: MobileAdGender.male, // or MobileAdGender.female, MobileAdGender.unknown
+    testDevices: <String>[], // Android emulators are considered test devices
+  );
+
+  BannerAd myBanner = BannerAd(
+  
+    adUnitId: "ca-app-pub-5425077113388628/4729570315",//BannerAd.testAdUnitId,
+    size: AdSize.smartBanner,
+    targetingInfo: targetingInfo,
+    listener: (MobileAdEvent event) {
+      print("BannerAd event is $event");
+    },
+  );*/
+
+  
 
   @override
   void initState() {
@@ -68,9 +68,8 @@ class _HomePageState extends State<HomePage> {
     _askPermission();
 
     //FirebaseAdMob.instance.initialize(appId: "ca-app-pub-5425077113388628~8668815327");
-    //_bannerAd = createBannerAd()
-    //  ..load()
-    //  ..show();
+    //myBanner..load()..show();
+    
     
   }
   

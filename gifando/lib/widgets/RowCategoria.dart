@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gifando/CategoriaPage.dart';
 
 import 'ContainerFuture.dart';
 
@@ -34,12 +35,19 @@ class RowCategoria extends StatelessWidget {
           children: <Widget>[
             Padding(
               padding: EdgeInsets.only(left: width *0.03, bottom: width *0.04),
-              child: Text(
+              child: GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => CategoriaPage(categoria: title,search: categoriaSearch,color: color,)
+                  ));
+                },
+                child: Text(
                 title,
                 style: TextStyle(
                     fontSize: width *0.06,
                     color: Colors.white,
                     fontWeight: FontWeight.bold),
+              ),
               ),
             ),
             ContainerFuture(
