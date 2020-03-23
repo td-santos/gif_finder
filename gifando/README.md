@@ -17,7 +17,7 @@ Aplicatico buscador de Gifs , com o ituito de pesquisar e realizar download do g
  
  ## Video Demonstrativo
  
- [Finance App Video](https://youtu.be/ec6wl12Lgy4)
+ [SquidGIF App Video](https://youtu.be/ec6wl12Lgy4)
  <br><br>
  
  
